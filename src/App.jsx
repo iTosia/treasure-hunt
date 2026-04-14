@@ -84,6 +84,7 @@ function App() {
         setFound(false);
         setShowResult(false);
         setShowMission(false);
+        setHintState("normal");
     };
 
     return (
