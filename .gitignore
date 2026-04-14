@@ -27,3 +27,4 @@ coverage
 GEMINI.md
 CLAUDE.md
 .vercel
+.env*.local
