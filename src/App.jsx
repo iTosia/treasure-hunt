@@ -10,6 +10,7 @@ function App() {
     const [hint, setHint] = useState("Try to find the treasure!");
     const [clicks, setClicks] = useState(0);
     const [found, setFound] = useState(false);
+    const [hintState, setHintState] = useState("normal");
     const [showResult, setShowResult] = useState(false);
     const [showMission, setShowMission] = useState(false);
     const [bestScore, setBestScore] = useState(
@@ -46,13 +47,17 @@ function App() {
         if (distance < 20) {
             setHint("Treasure found! 🎉");
             setFound(true);
+            setHintState("found");
             setShowResult(true);
         } else if (distance < 50) {
             setHint("Very hot 🔥");
+            setHintState("very-hot");
         } else if (distance < 120) {
             setHint("Warm 🌡️");
+            setHintState("warm");
         } else {
             setHint("Cold ❄️");
+            setHintState("normal");
         }
     };
 
@@ -86,7 +91,11 @@ function App() {
             <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">
                 Treasure Hunt
             </h1>
-            <p className="mb-2 text-center text-sm md:text-base">Hint: {hint}</p>
+            <div className={`hint-container mb-2 px-4 py-2 rounded-lg bg-gray-800 border ${hintState}`}>
+                <p className="text-center text-sm md:text-base font-semibold">
+                    <span className="text-yellow-400">Hint:</span> {hint}
+                </p>
+            </div>
             <p className="mb-2 text-center text-sm md:text-base">Clicks: {clicks}</p>
             {bestScore && (
                 <p className="mb-4 text-green-400 text-sm md:text-base text-center">
