@@ -14,7 +14,7 @@ function App() {
     const [hintState, setHintState] = useState("normal");
     const [showResult, setShowResult] = useState(false);
     const [modalClosing, setModalClosing] = useState(false);
-    const [showMission, setShowMission] = useState(false);
+    const [showMissionCompleted, setShowMissionCompleted] = useState(false);
     const [bestScore, setBestScore] = useState(
         localStorage.getItem("bestScore") || null
     );
@@ -85,9 +85,9 @@ function App() {
                 setBestScore(clicks);
                 localStorage.setItem("bestScore", clicks);
             }
-            setShowMission(true);
+            setShowMissionCompleted(true);
             audioRef.current.play();
-            setTimeout(() => setShowMission(false), 3000);
+            setTimeout(() => setShowMissionCompleted(false), 3000);
         });
     };
 
@@ -99,7 +99,7 @@ function App() {
         setClicks(0);
         setHint("Try to find the treasure!");
         setFound(false);
-        setShowMission(false);
+        setShowMissionCompleted(false);
         setHintState("normal");
     };
 
@@ -179,7 +179,7 @@ function App() {
                 </div>
             )}
 
-            {showMission && (
+            {showMissionCompleted && (
                 <div className="mission-overlay flex flex-col items-center">
                     <h1 className="mission-title text-3xl sm:text-4xl md:text-6xl lg:text-7xl">
                         Mission passed!
