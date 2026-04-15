@@ -5,6 +5,7 @@ import audioFile from "./assets/mission_complete.mp3";
 function App() {
     const mapRef = useRef(null);
     const audioRef = useRef(null);
+    const afterModalClose = useRef(null);
 
     const [treasure, setTreasure] = useState(null);
     const [hint, setHint] = useState("Try to find the treasure!");
@@ -12,6 +13,7 @@ function App() {
     const [found, setFound] = useState(false);
     const [hintState, setHintState] = useState("normal");
     const [showResult, setShowResult] = useState(false);
+    const [modalClosing, setModalClosing] = useState(false);
     const [showMission, setShowMission] = useState(false);
     const [bestScore, setBestScore] = useState(
         localStorage.getItem("bestScore") || null
@@ -61,20 +63,35 @@ function App() {
         }
     };
 
-    const handleOk = () => {
-        if (!bestScore || clicks < bestScore) {
-            setBestScore(clicks);
-            localStorage.setItem("bestScore", clicks);
-        }
-        setShowResult(false);
-        setShowMission(true);
-        audioRef.current.play();
-        setTimeout(() => {
-            setShowMission(false);
-        }, 3000);
+    const closeModal = (callback) => {
+        afterModalClose.current = callback;
+        setModalClosing(true);
     };
 
-    const handleRestart = () => {
+    const handleModalAnimationEnd = (e) => {
+        if (e.currentTarget === e.target && modalClosing) {
+            setShowResult(false);
+            setModalClosing(false);
+            if (afterModalClose.current) {
+                afterModalClose.current();
+                afterModalClose.current = null;
+            }
+        }
+    };
+
+    const handleOk = () => {
+        closeModal(() => {
+            if (!bestScore || clicks < parseInt(bestScore)) {
+                setBestScore(clicks);
+                localStorage.setItem("bestScore", clicks);
+            }
+            setShowMission(true);
+            audioRef.current.play();
+            setTimeout(() => setShowMission(false), 3000);
+        });
+    };
+
+    const doRestart = () => {
         if (mapRef.current) {
             const { width, height } = mapRef.current.getBoundingClientRect();
             setTreasure(generateTreasure(width, height));
@@ -82,58 +99,81 @@ function App() {
         setClicks(0);
         setHint("Try to find the treasure!");
         setFound(false);
-        setShowResult(false);
         setShowMission(false);
         setHintState("normal");
     };
 
+    const handleRestart = () => {
+        if (showResult) {
+            closeModal(doRestart);
+        } else {
+            doRestart();
+        }
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">
-                Treasure Hunt
-            </h1>
-            <div className={`hint-container mb-2 px-4 py-2 rounded-lg bg-gray-800 border ${hintState}`}>
-                <p className="text-center text-sm md:text-base font-semibold">
-                    <span className="text-yellow-400">Hint:</span> {hint}
-                </p>
-            </div>
-            <p className="mb-2 text-center text-sm md:text-base">Clicks: {clicks}</p>
-            {bestScore && (
-                <p className="mb-4 text-green-400 text-sm md:text-base text-center">
-                    Best score: {bestScore} clicks
-                </p>
-            )}
+        <div className="game-wrapper">
+            <div className="game-bg-overlay" />
 
-            <div className="relative w-full max-w-3xl">
-                <img
-                    ref={mapRef}
-                    src={mapImg}
-                    alt="map"
-                    onClick={handleClick}
-                    onLoad={handleMapLoad}
-                    className="w-full h-auto border-4 border-yellow-500 cursor-crosshair rounded"
-                />
-            </div>
+            <div className="game-content flex flex-col items-center justify-center min-h-screen p-4">
+                <header className="game-header mb-6">
+                    <span className="header-decoration">⚓</span>
+                    <h1 className="game-title">Treasure Hunt</h1>
+                    <span className="header-decoration">⚓</span>
+                </header>
 
-            <button
-                onClick={handleRestart}
-                className="mt-6 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition text-sm md:text-base"
-            >
-                Play Again
-            </button>
+                <div className={`hint-container mb-3 px-5 py-2 rounded-lg border ${hintState}`}>
+                    <p className="text-center text-sm md:text-base font-semibold">
+                        <span className="hint-label">Hint:</span> {hint}
+                    </p>
+                </div>
+
+                <div className="game-stats mb-4">
+                    <div className="stat-item">
+                        <span className="stat-label">Clicks</span>
+                        <span className="stat-value">{clicks}</span>
+                    </div>
+                    {bestScore && (
+                        <>
+                            <div className="stat-divider" />
+                            <div className="stat-item best">
+                                <span className="stat-label">Best</span>
+                                <span className="stat-value">{bestScore}</span>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                <div className="map-container w-full max-w-3xl">
+                    <img
+                        ref={mapRef}
+                        src={mapImg}
+                        alt="map"
+                        onClick={handleClick}
+                        onLoad={handleMapLoad}
+                    />
+                </div>
+
+                <button onClick={handleRestart} className="play-again-btn mt-6">
+                    ↺ Play Again
+                </button>
+            </div>
 
             {showResult && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/60 px-4">
-                    <div className="bg-white text-black p-6 rounded-lg text-center shadow-lg w-full max-w-sm">
-                        <h2 className="text-xl md:text-2xl font-bold mb-4">
-                            You found the treasure! 🎉
-                        </h2>
-                        <p className="mb-4 text-sm md:text-base">Clicks used: {clicks}</p>
-                        <button
-                            onClick={handleOk}
-                            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm md:text-base"
-                        >
-                            OK
+                <div className={`result-overlay${modalClosing ? " closing" : ""}`}>
+                    <div
+                        className={`result-modal${modalClosing ? " closing" : ""}`}
+                        onAnimationEnd={handleModalAnimationEnd}
+                    >
+                        <div className="modal-icon">💰</div>
+                        <h2 className="modal-title">Treasure Found!</h2>
+                        <p className="modal-subtitle">You discovered the treasure! 🎉</p>
+                        <div className="modal-score">
+                            <span className="modal-score-label">Clicks used</span>
+                            <span className="modal-score-value">{clicks}</span>
+                        </div>
+                        <button onClick={handleOk} className="modal-ok-btn">
+                            Collect Treasure
                         </button>
                     </div>
                 </div>
@@ -150,7 +190,7 @@ function App() {
                 </div>
             )}
 
-            <audio ref={audioRef} src={audioFile}/>
+            <audio ref={audioRef} src={audioFile} />
         </div>
     );
 }

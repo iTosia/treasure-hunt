@@ -13,30 +13,104 @@
 
 // CSS Variables
 :root {
+  // Base colors
   --color-text: rgba(255, 255, 255, 0.87);
-  --color-bg: #242424;
-
-  --color-link: #646cff;
-  --color-link-hover: #535bf2;
-
-  --color-btn-bg: #1a1a1a;
-  --color-btn-border-hover: #646cff;
-  --color-btn-text: #ffffff;
-
-  --color-overlay-bg: rgba(0, 0, 0, 0.7);
-
-  --color-mission-title: #facc15;
+  --color-bg: var(--bg-deep);
   --color-white: #ffffff;
-  --color-text-shadow: #000000;
+  --color-black: #000000;
 
+  // Gold palette
+  --gold-primary: #f5c842;
+  --gold-secondary: #e8a800;
+  --gold-light: #fff7c0;
+  --gold-bright: #ffd966;
+  --gold-dark: #c98800;
+  --gold-dim: rgba(245, 200, 66, 0.18);
+  --gold-glow: rgba(245, 200, 66, 0.35);
+
+  // Background colors
+  --bg-deep: #07090f;
+  --bg-surface: #0d1421;
+  --bg-surface-rgb: 13, 20, 33;
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+  --bg-modal: rgba(8, 12, 22, 0.97);
+
+  // Text colors
+  --text-primary: #e8edf5;
+  --text-muted: #7a8caa;
+
+  // Link colors
+  --color-link: var(--gold-primary);
+  --color-link-hover: var(--gold-secondary);
+
+  // Button colors
+  --color-btn-bg: rgba(var(--bg-surface-rgb), 0.8);
+  --color-btn-border-hover: rgba(245, 200, 66, 0.6);
+  --color-btn-text: var(--color-white);
+
+  // Mission colors
+  --color-mission-title: var(--gold-light);
+  --color-text-shadow: var(--color-black);
+
+  // Hint colors
   --hint-primary: #646cff;
   --hint-success: #22c55e;
   --hint-warning: #facc15;
   --hint-warm: #f97316;
   --hint-very-hot: #ef4444;
 
-  --gray-900: #111827;
-  --gray-800: #1f2937;
+  // Gray scale
+  --gray-900: var(--bg-deep);
+  --gray-800: var(--bg-surface);
+
+  // Modal
+  --modal-bg: var(--bg-modal);
+  --modal-border: rgba(245, 200, 66, 0.2);
+
+  // Overlay
+  --color-overlay-bg: var(--bg-overlay);
+
+  // Gradient helpers
+  --gradient-overlay-light: rgba(20, 38, 70, 0.75);
+  --gradient-overlay-dark: rgba(14, 20, 40, 0.6);
+  --gradient-vignette: rgba(0, 0, 0, 0.52);
+
+  // Success green
+  --success-green: #4ade80;
+  --success-green-glow: rgba(74, 222, 128, 0.35);
+
+  // Shadow helpers
+  --shadow-sm: rgba(0, 0, 0, 0.35);
+  --shadow-md: rgba(0, 0, 0, 0.5);
+  --shadow-lg: rgba(0, 0, 0, 0.65);
+  --shadow-xl: rgba(0, 0, 0, 0.8);
+
+  // White with opacity variants
+  --white-dim: rgba(255, 255, 255, 0.03);
+  --white-dimmer: rgba(255, 255, 255, 0.04);
+  --white-half: rgba(255, 255, 255, 0.5);
+  --white-bright: rgba(255, 255, 255, 0.8);
+
+  // Gold with opacity variants
+  --gold-glow-sm: rgba(245, 200, 66, 0.1);
+  --gold-glow-md: rgba(245, 200, 66, 0.14);
+  --gold-glow-lg: rgba(245, 200, 66, 0.18);
+  --gold-glow-xl: rgba(245, 200, 66, 0.35);
+  --gold-glow-2xl: rgba(245, 200, 66, 0.42);
+  --gold-glow-3xl: rgba(245, 200, 66, 0.55);
+  --gold-border-dim: rgba(245, 200, 66, 0.12);
+  --gold-border: rgba(245, 200, 66, 0.13);
+  --gold-border-bright: rgba(245, 200, 66, 0.38);
+  --gold-border-glow: rgba(245, 200, 66, 0.72);
+  --gold-bg-dim: rgba(245, 200, 66, 0.05);
+  --gold-bg-light: rgba(245, 200, 66, 0.09);
+
+  // Blue/purple hint variants
+  --hint-primary-glow: rgba(100, 108, 255, 0.3);
+  --hint-primary-border: rgba(100, 108, 255, 0.5);
+  --hint-primary-bright: rgba(100, 108, 255, 0.6);
+  --hint-primary-glow-lg: rgba(100, 108, 255, 1);
+  --hint-primary-glow-xl: rgba(100, 108, 255, 0.6);
 }
 
 @mixin font-smoothing {
@@ -53,7 +127,7 @@ body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light dark;
+  color-scheme: dark;
   color: var(--color-text);
   background-color: var(--color-bg);
   font-synthesis: none;
@@ -69,11 +143,6 @@ a {
   &:hover {
     color: var(--color-link-hover);
   }
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
@@ -97,7 +166,185 @@ button {
   }
 }
 
-// Mission Completed Animation
+// ─── Game Layout ────────────────────────────────────────────────────────────
+
+.game-wrapper {
+  position: relative;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%, rgba(20, 38, 70, 0.75) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 50% at 80% 110%, rgba(14, 20, 40, 0.6) 0%, transparent 70%),
+    var(--bg-deep);
+  overflow: hidden;
+}
+
+.game-bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 75% 65% at 50% 42%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.52) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.game-content {
+  position: relative;
+  z-index: 1;
+}
+
+// ─── Header ─────────────────────────────────────────────────────────────────
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+
+  .header-decoration {
+    font-size: 1.5rem;
+    opacity: 0.45;
+    filter: drop-shadow(0 0 10px var(--gold-glow-xl));
+    user-select: none;
+  }
+}
+
+.game-title {
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  font-weight: 800;
+  background: linear-gradient(
+    135deg,
+    var(--gold-primary) 0%,
+    var(--gold-light) 42%,
+    var(--gold-primary) 58%,
+    var(--gold-dark) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 22px var(--gold-glow-xl));
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+// ─── Stats HUD ───────────────────────────────────────────────────────────────
+
+.game-stats {
+  display: flex;
+  align-items: center;
+  background: rgba(var(--bg-surface-rgb), 0.7);
+  border: 1px solid var(--gold-border);
+  border-radius: 14px;
+  padding: 10px 0;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 0 0 1px var(--white-dim) inset,
+    0 8px 24px var(--shadow-sm);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 26px;
+
+  &.best .stat-value {
+    color: var(--success-green);
+    filter: drop-shadow(0 0 8px var(--success-green-glow));
+  }
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--gold-primary);
+  line-height: 1.1;
+  filter: drop-shadow(0 0 8px var(--gold-glow-xl));
+}
+
+.stat-divider {
+  width: 1px;
+  height: 42px;
+  background: var(--gold-border-dim);
+  flex-shrink: 0;
+}
+
+// ─── Map Container ───────────────────────────────────────────────────────────
+
+.map-container {
+  border-radius: 10px;
+  border: 2.5px solid transparent;
+  background:
+    linear-gradient(var(--bg-surface), var(--bg-surface)) padding-box,
+    linear-gradient(135deg, var(--gold-primary) 0%, #8a5a00 48%, var(--gold-primary) 100%) border-box;
+  box-shadow:
+    0 0 0 1px var(--shadow-md),
+    0 0 45px var(--gold-glow-md),
+    0 0 90px var(--gold-glow-sm),
+    0 28px 70px var(--shadow-lg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: crosshair;
+  }
+}
+
+// ─── Play Again Button ────────────────────────────────────────────────────────
+
+.play-again-btn {
+  background: rgba(var(--bg-surface-rgb), 0.75);
+  border: 1.5px solid var(--gold-border-bright);
+  color: var(--gold-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  padding: 10px 28px;
+  border-radius: 9px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  @include transition;
+
+  &:hover {
+    background: var(--gold-bg-light);
+    border-color: var(--gold-border-glow);
+    color: var(--gold-bright);
+    box-shadow:
+      0 0 22px var(--gold-glow-lg),
+      0 6px 16px var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+// ─── Hint Label ──────────────────────────────────────────────────────────────
+
+.hint-label {
+  color: var(--gold-primary);
+}
+
+// ─── Mission Completed Animation ─────────────────────────────────────────────
+
 .mission-overlay {
   position: fixed;
   inset: 0;
@@ -153,19 +400,20 @@ button {
   }
 }
 
-// Hint Container Animations
+// ─── Hint Container ───────────────────────────────────────────────────────────
+
 @keyframes hintPulse {
   0%, 100% {
     opacity: 1;
     transform: scale(1);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 10px var(--white-half);
   }
   50% {
     opacity: 0.8;
     transform: scale(1.05);
     text-shadow:
-      0 0 20px rgba(255, 255, 255, 0.8),
-      0 0 30px rgba(100, 108, 255, 0.5);
+      0 0 20px var(--white-bright),
+      0 0 30px var(--hint-primary-border);
   }
 }
 
@@ -182,14 +430,14 @@ button {
 
 @keyframes hintGlow {
   0%, 100% {
-    border-color: rgba(100, 108, 255, 0.5);
-    box-shadow: 0 0 10px rgba(100, 108, 255, 0.3);
+    border-color: var(--hint-primary-border);
+    box-shadow: 0 0 10px var(--hint-primary-glow);
   }
   50% {
-    border-color: rgba(100, 108, 255, 1);
+    border-color: var(--hint-primary-glow-lg);
     box-shadow:
-      0 0 20px rgba(100, 108, 255, 0.6),
-      0 0 40px rgba(100, 108, 255, 0.3);
+      0 0 20px var(--hint-primary-bright),
+      0 0 40px var(--hint-primary-glow);
   }
 }
 
@@ -204,6 +452,7 @@ button {
 
 .hint-container {
   position: relative;
+  background: rgba(var(--bg-surface-rgb), 0.75);
   animation:
     hintSlideIn 0.3s ease-out,
     hintPulse 2s ease-in-out infinite;
@@ -268,6 +517,166 @@ button {
       animation:
         hintGlow 1s ease-in-out infinite,
         hintGradientShift 2s ease-in-out infinite;
+    }
+  }
+}
+
+// ─── Result Modal ─────────────────────────────────────────────────────────────
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes backdropOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes modalIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-28px);
+  }
+  62% {
+    opacity: 1;
+    transform: scale(1.035) translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(18px);
+  }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--shadow-lg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  padding: 16px;
+  animation: backdropIn 0.32s ease forwards;
+
+  &.closing {
+    animation: backdropOut 0.28s ease forwards;
+  }
+}
+
+.result-modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: 22px;
+  padding: 40px 36px 34px;
+  text-align: center;
+  width: 100%;
+  max-width: 380px;
+  box-shadow:
+    0 0 0 1px var(--white-dimmer) inset,
+    0 0 45px var(--gold-glow-sm),
+    0 36px 90px var(--shadow-xl);
+  animation: modalIn 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+  &.closing {
+    animation: modalOut 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .modal-icon {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 18px var(--gold-glow-3xl));
+    animation: iconFloat 2.6s ease-in-out infinite;
+  }
+
+  .modal-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--gold-primary);
+    margin: 0 0 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .modal-subtitle {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin: 0 0 24px;
+    line-height: 1.5;
+  }
+
+  .modal-score {
+    background: var(--gold-bg-dim);
+    border: 1px solid var(--gold-border-dim);
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    .modal-score-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .modal-score-value {
+      font-size: 3.4rem;
+      font-weight: 800;
+      color: var(--gold-primary);
+      line-height: 1;
+      filter: drop-shadow(0 0 14px var(--gold-glow-2xl));
+    }
+  }
+
+  .modal-ok-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+    color: var(--bg-deep);
+    border: none;
+    border-radius: 11px;
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    @include transition(all, 0.2s);
+
+    &:hover {
+      background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-primary) 100%);
+      box-shadow:
+        0 0 30px rgba(245, 200, 66, 0.42),
+        0 8px 22px rgba(0, 0, 0, 0.35);
+      transform: translateY(-2px);
+      border-color: transparent;
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
     }
   }
 }
