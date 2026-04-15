@@ -182,10 +182,10 @@ function App() {
             {showMission && (
                 <div className="mission-overlay flex flex-col items-center">
                     <h1 className="mission-title text-3xl sm:text-4xl md:text-6xl lg:text-7xl">
-                        Mission Completed
+                        Mission passed!
                     </h1>
                     <h2 className="mission-text text-xl sm:text-2xl md:text-4xl lg:text-5xl mt-2">
-                        + RESPECT
+                        RESPECT +
                     </h2>
                 </div>
             )}
