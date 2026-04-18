@@ -349,28 +349,39 @@ button {
 .mission-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeInOut 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
-    animation: stripeWidth 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  &.visible {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: fadeInOut 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: auto;
+    visibility: visible;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+      animation: stripeWidth 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    &::before { top: 25%; }
+    &::after { bottom: 25%; }
   }
-
-  &::before { top: 25%; }
-  &::after { bottom: 25%; }
 }
 
 .mission-title,
@@ -379,6 +390,12 @@ button {
   font-family: 'Pricedown', sans-serif;
   text-transform: uppercase;
   text-align: center;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.mission-overlay.visible .mission-title,
+.mission-overlay.visible .mission-text {
   text-shadow:
     -3px -3px 0 var(--color-text-shadow),
     3px -3px 0 var(--color-text-shadow),
@@ -389,6 +406,8 @@ button {
     0px -3px 0 var(--color-text-shadow),
     -3px  0px 0 var(--color-text-shadow);
   animation: missionTextPop 4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 1;
+  visibility: visible;
 }
 
 .mission-title {

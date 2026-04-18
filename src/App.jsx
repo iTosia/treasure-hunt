@@ -179,16 +179,14 @@ function App() {
                 </div>
             )}
 
-            {showMissionCompleted && (
-                <div className="mission-overlay flex flex-col items-center">
-                    <h1 className="mission-title">
-                        Mission passed!
-                    </h1>
-                    <h2 className="mission-text">
-                        RESPECT +
-                    </h2>
-                </div>
-            )}
+            <div className={`mission-overlay flex flex-col items-center ${showMissionCompleted ? " visible" : ""}`}>
+                <h1 className="mission-title">
+                    Mission passed!
+                </h1>
+                <h2 className="mission-text">
+                    RESPECT +
+                </h2>
+            </div>
 
             <audio ref={audioRef} src={audioFile} />
         </div>
