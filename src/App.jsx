@@ -87,7 +87,7 @@ function App() {
             }
             setShowMissionCompleted(true);
             audioRef.current.play();
-            setTimeout(() => setShowMissionCompleted(false), 3000);
+            setTimeout(() => setShowMissionCompleted(false), 4000);
         });
     };
 
@@ -181,10 +181,10 @@ function App() {
 
             {showMissionCompleted && (
                 <div className="mission-overlay flex flex-col items-center">
-                    <h1 className="mission-title text-3xl sm:text-4xl md:text-6xl lg:text-7xl">
+                    <h1 className="mission-title">
                         Mission passed!
                     </h1>
-                    <h2 className="mission-text text-xl sm:text-2xl md:text-4xl lg:text-5xl mt-2">
+                    <h2 className="mission-text">
                         RESPECT +
                     </h2>
                 </div>

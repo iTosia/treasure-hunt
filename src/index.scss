@@ -349,12 +349,28 @@ button {
 .mission-overlay {
   position: fixed;
   inset: 0;
-  background: var(--color-overlay-bg);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeInOut 3s forwards;
-  z-index: 50;
+  animation: fadeInOut 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  z-index: 100;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+    animation: stripeWidth 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  &::before { top: 25%; }
+  &::after { bottom: 25%; }
 }
 
 .mission-title,
@@ -372,33 +388,67 @@ button {
     3px  0px 0 var(--color-text-shadow),
     0px -3px 0 var(--color-text-shadow),
     -3px  0px 0 var(--color-text-shadow);
+  animation: missionTextPop 4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .mission-title {
   color: var(--color-mission-title);
+  font-size: clamp(3rem, 10vw, 8rem);
 }
 
 .mission-text {
   color: var(--color-white);
+  font-size: clamp(1.5rem, 5vw, 4rem);
+  margin-top: 1rem;
 }
 
 @keyframes fadeInOut {
   0% {
     opacity: 0;
-    transform: scale(0.8);
+    backdrop-filter: blur(0px);
   }
-  20% {
+  15% {
     opacity: 1;
-    transform: scale(1);
+    backdrop-filter: blur(10px);
   }
-  80% {
+  85% {
     opacity: 1;
-    transform: scale(1);
+    backdrop-filter: blur(10px);
   }
   100% {
     opacity: 0;
-    transform: scale(0.9);
+    backdrop-filter: blur(0px);
   }
+}
+
+@keyframes missionTextPop {
+  0% {
+    opacity: 0;
+    transform: scale(2);
+    filter: blur(20px);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  85% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(10px);
+  }
+}
+
+@keyframes stripeWidth {
+  0% { width: 0; left: 50%; }
+  15% { width: 100%; left: 0; }
+  85% { width: 100%; left: 0; }
+  100% { width: 0; left: 50%; }
 }
 
 // ─── Hint Container ───────────────────────────────────────────────────────────
