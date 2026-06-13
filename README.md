@@ -2,7 +2,7 @@
 
 A polished, interactive "Hot or Cold" treasure hunting game built with React. Players must locate a hidden treasure on a mysterious map, guided by proximity hints that change as they get closer to the target.
 
-![Game Preview](https://raw.githubusercontent.com/itosya/treasure-hunt/main/src/assets/map.png) *(Replace with a real screenshot in your portfolio)*
+![Game Preview](./assets/screenshots/screenshot.png)
 
 ## 🌟 Features
 
@@ -28,10 +28,12 @@ A polished, interactive "Hot or Cold" treasure hunting game built with React. Pl
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (Latest LTS recommended)
 - npm or yarn
 
 ### Installation
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/itosya/treasure-hunt.git
@@ -46,6 +48,7 @@ A polished, interactive "Hot or Cold" treasure hunting game built with React. Pl
    ```
 
 ## 🕹️ How to Play
+
 1. Open the game in your browser.
 2. Click anywhere on the map to search for the treasure.
 3. Observe the **Hint** label at the top:
@@ -55,6 +58,7 @@ A polished, interactive "Hot or Cold" treasure hunting game built with React. Pl
 5. Try to find the treasure in the fewest clicks possible to beat your best score!
 
 ## 📁 Project Structure
+
 ```text
 src/
 ├── assets/             # Map images, sound effects, and custom fonts
@@ -64,4 +68,5 @@ src/
 ```
 
 ---
-*Developed by [iTosya](https://github.com/itosya)*
+
+_Developed by [iTosya](https://github.com/itosya)_
