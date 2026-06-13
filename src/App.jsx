@@ -7,6 +7,7 @@ function App() {
     const audioRef = useRef(null);
     const afterModalClose = useRef(null);
 
+    const [isLoading, setIsLoading] = useState(true);
     const [treasure, setTreasure] = useState(null);
     const [hint, setHint] = useState("Try to find the treasure!");
     const [clicks, setClicks] = useState(0);
@@ -27,6 +28,7 @@ function App() {
     }
 
     const handleMapLoad = () => {
+        setIsLoading(false);
         if (mapRef.current) {
             const { width, height } = mapRef.current.getBoundingClientRect();
             setTreasure(generateTreasure(width, height));
@@ -187,6 +189,14 @@ function App() {
                     RESPECT +
                 </h2>
             </div>
+            {isLoading && (
+                <div className="loading-overlay">
+                    <div className="loading-content">
+                        <div className="loading-spinner"></div>
+                        <h2 className="loading-text">Loading Map...</h2>
+                    </div>
+                </div>
+            )}
 
             <audio ref={audioRef} src={audioFile} />
         </div>
