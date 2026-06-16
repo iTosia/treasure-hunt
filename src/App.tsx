@@ -1,8 +1,9 @@
+import React from 'react';
 import { useTreasureHunt } from "./hooks/useTreasureHunt";
 import mapImg from "./assets/map.png";
 import audioFile from "./assets/mission_complete.mp3";
 
-function App() {
+const App: React.FC = () => {
     const {
         mapRef,
         audioRef,

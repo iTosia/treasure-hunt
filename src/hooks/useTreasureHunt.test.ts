@@ -36,10 +36,10 @@ describe('useTreasureHunt', () => {
     });
 
     const clickEvent = {
-      target: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
+      currentTarget: { getBoundingClientRect: () => ({ left: 0, top: 0 }) },
       clientX: 500,
       clientY: 500,
-    };
+    } as React.MouseEvent<HTMLImageElement>;
 
     act(() => {
       result.current.handleClick(clickEvent);

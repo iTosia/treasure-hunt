@@ -1,13 +1,38 @@
 import { useState, useRef } from 'react';
 import { calculateDistance, getHintForDistance } from '../utils/gameLogic';
 
-export function useTreasureHunt() {
-  const mapRef = useRef(null);
-  const audioRef = useRef(null);
-  const afterModalClose = useRef(null);
+interface Treasure {
+  x: number;
+  y: number;
+}
+
+interface UseTreasureHuntReturn {
+  mapRef: React.RefObject<HTMLImageElement | null>;
+  audioRef: React.RefObject<HTMLAudioElement | null>;
+  isLoading: boolean;
+  treasure: Treasure | null;
+  hint: string;
+  clicks: number;
+  found: boolean;
+  hintState: string;
+  showResult: boolean;
+  modalClosing: boolean;
+  showMissionCompleted: boolean;
+  bestScore: string | number | null;
+  handleMapLoad: () => void;
+  handleClick: (e: React.MouseEvent<HTMLImageElement>) => void;
+  handleModalAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => void;
+  handleOk: () => void;
+  handleRestart: () => void;
+}
+
+export function useTreasureHunt(): UseTreasureHuntReturn {
+  const mapRef = useRef<HTMLImageElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const afterModalClose = useRef<(() => void) | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [treasure, setTreasure] = useState(null);
+  const [treasure, setTreasure] = useState<Treasure | null>(null);
   const [hint, setHint] = useState("Try to find the treasure!");
   const [clicks, setClicks] = useState(0);
   const [found, setFound] = useState(false);
@@ -15,11 +40,11 @@ export function useTreasureHunt() {
   const [showResult, setShowResult] = useState(false);
   const [modalClosing, setModalClosing] = useState(false);
   const [showMissionCompleted, setShowMissionCompleted] = useState(false);
-  const [bestScore, setBestScore] = useState(
+  const [bestScore, setBestScore] = useState<string | number | null>(
     localStorage.getItem("bestScore") || null
   );
 
-  function generateTreasure(width, height) {
+  function generateTreasure(width: number, height: number): Treasure {
     return {
       x: Math.floor(Math.random() * width),
       y: Math.floor(Math.random() * height),
@@ -34,10 +59,10 @@ export function useTreasureHunt() {
     }
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
     if (found || !treasure) return;
 
-    const rect = e.target.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
@@ -54,12 +79,12 @@ export function useTreasureHunt() {
     }
   };
 
-  const closeModal = (callback) => {
+  const closeModal = (callback: () => void) => {
     afterModalClose.current = callback;
     setModalClosing(true);
   };
 
-  const handleModalAnimationEnd = (e) => {
+  const handleModalAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
     if (e.currentTarget === e.target && modalClosing) {
       setShowResult(false);
       setModalClosing(false);
@@ -72,9 +97,9 @@ export function useTreasureHunt() {
 
   const handleOk = () => {
     closeModal(() => {
-      if (!bestScore || clicks < parseInt(bestScore)) {
+      if (!bestScore || clicks < parseInt(bestScore.toString())) {
         setBestScore(clicks);
-        localStorage.setItem("bestScore", clicks);
+        localStorage.setItem("bestScore", clicks.toString());
       }
       setShowMissionCompleted(true);
       if (audioRef.current) {
