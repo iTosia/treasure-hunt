@@ -1,117 +1,25 @@
-import { useState, useRef } from "react";
+import { useTreasureHunt } from "./hooks/useTreasureHunt";
 import mapImg from "./assets/map.png";
 import audioFile from "./assets/mission_complete.mp3";
 
 function App() {
-    const mapRef = useRef(null);
-    const audioRef = useRef(null);
-    const afterModalClose = useRef(null);
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [treasure, setTreasure] = useState(null);
-    const [hint, setHint] = useState("Try to find the treasure!");
-    const [clicks, setClicks] = useState(0);
-    const [found, setFound] = useState(false);
-    const [hintState, setHintState] = useState("normal");
-    const [showResult, setShowResult] = useState(false);
-    const [modalClosing, setModalClosing] = useState(false);
-    const [showMissionCompleted, setShowMissionCompleted] = useState(false);
-    const [bestScore, setBestScore] = useState(
-        localStorage.getItem("bestScore") || null
-    );
-
-    function generateTreasure(width, height) {
-        return {
-            x: Math.floor(Math.random() * width),
-            y: Math.floor(Math.random() * height),
-        };
-    }
-
-    const handleMapLoad = () => {
-        setIsLoading(false);
-        if (mapRef.current) {
-            const { width, height } = mapRef.current.getBoundingClientRect();
-            setTreasure(generateTreasure(width, height));
-        }
-    };
-
-    const handleClick = (e) => {
-        if (found || !treasure) return;
-
-        const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const dx = x - treasure.x;
-        const dy = y - treasure.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        setClicks((prev) => prev + 1);
-
-        if (distance < 20) {
-            setHint("Treasure found! 🎉");
-            setFound(true);
-            setHintState("found");
-            setShowResult(true);
-        } else if (distance < 50) {
-            setHint("Very hot 🔥");
-            setHintState("very-hot");
-        } else if (distance < 120) {
-            setHint("Warm 🌡️");
-            setHintState("warm");
-        } else {
-            setHint("Cold ❄️");
-            setHintState("normal");
-        }
-    };
-
-    const closeModal = (callback) => {
-        afterModalClose.current = callback;
-        setModalClosing(true);
-    };
-
-    const handleModalAnimationEnd = (e) => {
-        if (e.currentTarget === e.target && modalClosing) {
-            setShowResult(false);
-            setModalClosing(false);
-            if (afterModalClose.current) {
-                afterModalClose.current();
-                afterModalClose.current = null;
-            }
-        }
-    };
-
-    const handleOk = () => {
-        closeModal(() => {
-            if (!bestScore || clicks < parseInt(bestScore)) {
-                setBestScore(clicks);
-                localStorage.setItem("bestScore", clicks);
-            }
-            setShowMissionCompleted(true);
-            audioRef.current.play();
-            setTimeout(() => setShowMissionCompleted(false), 4000);
-        });
-    };
-
-    const doRestart = () => {
-        if (mapRef.current) {
-            const { width, height } = mapRef.current.getBoundingClientRect();
-            setTreasure(generateTreasure(width, height));
-        }
-        setClicks(0);
-        setHint("Try to find the treasure!");
-        setFound(false);
-        setShowMissionCompleted(false);
-        setHintState("normal");
-    };
-
-    const handleRestart = () => {
-        if (showResult) {
-            closeModal(doRestart);
-        } else {
-            doRestart();
-        }
-    };
+    const {
+        mapRef,
+        audioRef,
+        isLoading,
+        hint,
+        clicks,
+        hintState,
+        showResult,
+        modalClosing,
+        showMissionCompleted,
+        bestScore,
+        handleMapLoad,
+        handleClick,
+        handleModalAnimationEnd,
+        handleOk,
+        handleRestart,
+    } = useTreasureHunt();
 
     return (
         <div className="game-wrapper">
