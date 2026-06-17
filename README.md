@@ -9,6 +9,7 @@ A professionally engineered, interactive "Hot or Cold" treasure hunting game. Th
 Beyond the game mechanics, this project serves as a showcase of modern software engineering practices:
 
 ### 🛠️ Technical Implementation
+
 - **Type-Safe Architecture**: Fully migrated to **TypeScript**, ensuring robust data structures and reducing runtime errors through strict typing of game state and event handlers.
 - **Separation of Concerns**: Decoupled game logic from the UI by implementing a **custom React hook (`useTreasureHunt`)** and a layer of **pure utility functions**. This ensures the business logic is independent of the presentation layer.
 - **TDD (Test-Driven Development)**:
@@ -30,18 +31,19 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-| :--- | :--- |
-| **Language** | TypeScript |
-| **Framework** | React 19 |
-| **Build Tool** | Vite |
-| **Styling** | Tailwind CSS & SCSS |
-| **Testing** | Vitest, React Testing Library, Playwright |
-| **CI/CD** | GitHub Actions $\rightarrow$ Vercel |
+| Layer          | Technology                                |
+| :------------- | :---------------------------------------- |
+| **Language**   | TypeScript                                |
+| **Framework**  | React 19                                  |
+| **Build Tool** | Vite                                      |
+| **Styling**    | Tailwind CSS & SCSS                       |
+| **Testing**    | Vitest, React Testing Library, Playwright |
+| **CI/CD**      | GitHub Actions $\rightarrow$ Vercel       |
 
 ## 🚀 Getting Started
 
 ### Installation
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/itosya/treasure-hunt.git
@@ -56,6 +58,7 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
    ```
 
 ### Running Tests
+
 - **Unit Tests**: `npm test`
 - **E2E Tests**: `npm run test:e2e`
 
@@ -75,4 +78,4 @@ tests/
 
 ---
 
-_Developed by [iTosya](https://github.com/itosya)_
+_Developed by [iTosya](https://github.com/iTosia)_
