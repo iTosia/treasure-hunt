@@ -78,4 +78,4 @@ tests/
 
 ---
 
-_Developed by [iTosya](https://github.com/iTosia)_
+_Developed by [iTosia](https://github.com/iTosia)_
