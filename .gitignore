@@ -28,3 +28,8 @@ GEMINI.md
 CLAUDE.md
 .vercel
 .env*.local
+
+# next.js
+/.next/
+/out/
+.next

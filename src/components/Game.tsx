@@ -1,9 +1,12 @@
-import React from 'react';
-import { useTreasureHunt } from "./hooks/useTreasureHunt";
-import mapImg from "./assets/map.png";
-import audioFile from "./assets/mission_complete.mp3";
+'use client';
 
-const App: React.FC = () => {
+import React from 'react';
+import { useTreasureHunt } from "../hooks/useTreasureHunt";
+
+const mapImg = "/assets/map.png";
+const audioFile = "/assets/mission_complete.mp3";
+
+const Game: React.FC = () => {
     const {
         mapRef,
         audioRef,
@@ -112,4 +115,4 @@ const App: React.FC = () => {
     );
 }
 
-export default App;
+export default Game;
