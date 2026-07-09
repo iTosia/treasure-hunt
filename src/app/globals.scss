@@ -204,6 +204,7 @@ button {
   align-items: center;
   justify-content: flex-end;
   padding: 10px;
+  height: 72px;
 
   @media (max-width: 285px) {
     justify-content: center;
@@ -258,7 +259,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 12px;
+    padding: 10px;
   }
 }
 
