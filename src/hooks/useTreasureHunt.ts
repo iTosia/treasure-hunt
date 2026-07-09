@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { calculateDistance, getHintForDistance } from '../utils/gameLogic';
+import { submitScore } from '../app/actions/leaderboard';
 
 interface Treasure {
   x: number;
@@ -24,6 +25,7 @@ interface UseTreasureHuntReturn {
   handleModalAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => void;
   handleOk: () => void;
   handleRestart: () => void;
+  isSubmitting: boolean;
 }
 
 export function useTreasureHunt(): UseTreasureHuntReturn {
@@ -40,8 +42,9 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
   const [showResult, setShowResult] = useState(false);
   const [modalClosing, setModalClosing] = useState(false);
   const [showMissionCompleted, setShowMissionCompleted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [bestScore, setBestScore] = useState<string | number | null>(
-    localStorage.getItem("bestScore") || null
+    typeof window !== 'undefined' ? localStorage.getItem("bestScore") : null
   );
 
   function generateTreasure(width: number, height: number): Treasure {
@@ -95,12 +98,24 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     }
   };
 
-  const handleOk = () => {
-    closeModal(() => {
+  const handleOk = async () => {
+    closeModal(async () => {
+      // Update Local Score
       if (!bestScore || clicks < parseInt(bestScore.toString())) {
         setBestScore(clicks);
         localStorage.setItem("bestScore", clicks.toString());
       }
+
+      // Submit to Global Leaderboard if authenticated
+      try {
+        setIsSubmitting(true);
+        await submitScore(clicks);
+      } catch (e) {
+        console.log("Score submission skipped or failed (likely not signed in)");
+      } finally {
+        setIsSubmitting(false);
+      }
+
       setShowMissionCompleted(true);
       if (audioRef.current) {
         audioRef.current.play();
@@ -147,5 +162,6 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     handleModalAnimationEnd,
     handleOk,
     handleRestart,
+    isSubmitting,
   };
 }

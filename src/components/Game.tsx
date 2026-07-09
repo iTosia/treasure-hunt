@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTreasureHunt } from "../hooks/useTreasureHunt";
+import AuthHUD from "./AuthHUD";
+import LeaderboardModal from "./LeaderboardModal";
 
 const mapImg = "/assets/map.png";
 const audioFile = "/assets/mission_complete.mp3";
 
 const Game: React.FC = () => {
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
     const {
         mapRef,
         audioRef,
@@ -27,6 +30,7 @@ const Game: React.FC = () => {
 
     return (
         <div className="game-wrapper">
+            <AuthHUD />
             <div className="game-bg-overlay" />
 
             <div className="game-content flex flex-col items-center justify-center min-h-screen p-4">
@@ -68,9 +72,17 @@ const Game: React.FC = () => {
                     />
                 </div>
 
-                <button onClick={handleRestart} className="play-again-btn mt-6">
-                    ↺ Play Again
-                </button>
+                <div className="flex gap-4">
+                    <button onClick={handleRestart} className="play-again-btn mt-6">
+                        ↺ Play Again
+                    </button>
+                    <button
+                        onClick={() => setShowLeaderboard(true)}
+                        className="play-again-btn mt-6"
+                    >
+                        🏆 Leaderboard
+                    </button>
+                </div>
             </div>
 
             {showResult && (
@@ -86,12 +98,17 @@ const Game: React.FC = () => {
                             <span className="modal-score-label">Clicks used</span>
                             <span className="modal-score-value">{clicks}</span>
                         </div>
-                        <button onClick={handleOk} className="modal-ok-btn">
+                        <button onClick={handleOk} className="modal-ok-btn mt-6">
                             Collect Treasure
                         </button>
                     </div>
                 </div>
             )}
+
+            <LeaderboardModal
+                isOpen={showLeaderboard}
+                onClose={() => setShowLeaderboard(false)}
+            />
 
             <div className={`mission-overlay flex flex-col items-center ${showMissionCompleted ? " visible" : ""}`}>
                 <h1 className="mission-title">

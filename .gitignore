@@ -33,3 +33,5 @@ CLAUDE.md
 /.next/
 /out/
 .next
+
+/src/generated/prisma
