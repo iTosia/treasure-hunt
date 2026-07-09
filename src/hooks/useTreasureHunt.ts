@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { calculateDistance, getHintForDistance } from '../utils/gameLogic';
 import { submitScore } from '../app/actions/leaderboard';
 
@@ -43,9 +43,21 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
   const [modalClosing, setModalClosing] = useState(false);
   const [showMissionCompleted, setShowMissionCompleted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [bestScore, setBestScore] = useState<string | number | null>(
-    typeof window !== 'undefined' ? localStorage.getItem("bestScore") : null
-  );
+  const [bestScore, setBestScore] = useState<string | number | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("bestScore");
+    if (saved !== null) {
+      setBestScore(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mapRef.current?.complete && mapRef.current.naturalWidth > 0) {
+      handleMapLoad();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function generateTreasure(width: number, height: number): Treasure {
     return {
