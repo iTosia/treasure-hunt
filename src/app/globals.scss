@@ -206,8 +206,9 @@ button {
   padding: 10px;
   height: 72px;
 
-  @media (max-width: 285px) {
+  @media (max-width: 320px) {
     justify-content: center;
+    height: auto;
   }
 
   .auth-prompt {
@@ -217,7 +218,7 @@ button {
     flex-direction: row;
     gap: 10px;
 
-    @media (max-width: 285px) {
+    @media (max-width: 320px) {
       flex-direction: column;
     }
 
