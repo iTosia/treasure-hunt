@@ -203,12 +203,62 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding: 10px;
+
+  @media (max-width: 285px) {
+    justify-content: center;
+  }
+
+  .auth-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+
+    @media (max-width: 285px) {
+      flex-direction: column;
+    }
+
+    .auth-label {
+      text-align: center;
+    }
+
+    .auth-btn {
+      background: rgba(var(--bg-surface-rgb), 0.75);
+      border: 1.5px solid var(--gold-border-bright);
+      color: var(--gold-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      padding: 10px 28px;
+      border-radius: 9px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      @include transition;
+
+      &:hover {
+        background: var(--gold-bg-light);
+        border-color: var(--gold-border-glow);
+        color: var(--gold-bright);
+        box-shadow:
+          0 0 22px var(--gold-glow-lg),
+          0 6px 16px var(--shadow-sm);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+    }
+  }
 
   .auth-user {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px;
+    margin: 12px;
   }
 }
 
