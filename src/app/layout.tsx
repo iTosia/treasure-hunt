@@ -15,6 +15,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <link rel="icon" type="image/x-icon" href="/favicon.svg" />
+        </head>
         <body className="antialiased">
           {children}
         </body>
