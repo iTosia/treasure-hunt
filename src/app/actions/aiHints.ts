@@ -38,8 +38,9 @@ export async function generateAIHint({ distance, relativeX, relativeY, clicks }:
   `;
 
   try {
+    // Use the fastest Claude model for low-latency hints
     const { text } = await generateText({
-      model: anthropic('claude-3-5-haiku-latest'),
+      model: anthropic('claude-3-haiku'),
       prompt: prompt,
     });
 

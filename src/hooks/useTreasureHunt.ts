@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { calculateDistance, getHintForDistance } from '../utils/gameLogic';
 import { submitScore } from '../app/actions/leaderboard';
+import { generateAIHint } from '../app/actions/aiHints';
 
 interface Treasure {
   x: number;
@@ -74,7 +75,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     }
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     if (found || !treasure) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
@@ -83,12 +84,29 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
 
     const distance = calculateDistance(x, y, treasure.x, treasure.y);
 
-    setClicks((prev) => prev + 1);
+    const newClicks = clicks + 1;
+    setClicks(newClicks);
 
     const { text, state, isFound } = getHintForDistance(distance);
     setHint(text);
     setHintState(state);
     setFound(isFound);
+
+    // Every 2nd click (and not found), call AI for a thematic pirate hint
+    if (newClicks % 2 === 0 && !isFound) {
+      const relativeX = x - treasure.x;
+      const relativeY = y - treasure.y;
+      const aiResult = await generateAIHint({
+        distance,
+        relativeX,
+        relativeY,
+        clicks: newClicks,
+      });
+      if (aiResult.success) {
+        setHint(aiResult.hint);
+      }
+    }
+
     if (isFound) {
       setShowResult(true);
     }

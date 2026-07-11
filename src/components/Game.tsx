@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useTreasureHunt } from "../hooks/useTreasureHunt";
 import AuthHUD from "./AuthHUD";
 import LeaderboardModal from "./LeaderboardModal";
@@ -8,8 +8,17 @@ import LeaderboardModal from "./LeaderboardModal";
 const mapImg = "/assets/map.png";
 const audioFile = "/assets/mission_complete.mp3";
 
+interface Ripple {
+  id: number;
+  x: number;
+  y: number;
+}
+
 const Game: React.FC = () => {
     const [showLeaderboard, setShowLeaderboard] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [ripples, setRipples] = useState<Ripple[]>([]);
+    const rippleIdRef = useRef(0);
     const {
         mapRef,
         audioRef,
@@ -21,12 +30,37 @@ const Game: React.FC = () => {
         modalClosing,
         showMissionCompleted,
         bestScore,
+        isSubmitting,
         handleMapLoad,
         handleClick,
         handleModalAnimationEnd,
         handleOk,
         handleRestart,
     } = useTreasureHunt();
+
+    const handleMapClick = useCallback((e: React.MouseEvent<HTMLImageElement>) => {
+        // Add ripple effect
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const id = ++rippleIdRef.current;
+        setRipples((prev) => [...prev, { id, x, y }]);
+        setTimeout(() => {
+            setRipples((prev) => prev.filter((r) => r.id !== id));
+        }, 600);
+
+        handleClick(e);
+    }, [handleClick]);
+
+    const toggleMute = () => {
+        setIsMuted((prev) => {
+            const newMuted = !prev;
+            if (audioRef.current) {
+                audioRef.current.muted = newMuted;
+            }
+            return newMuted;
+        });
+    };
 
     return (
         <div className="game-wrapper">
@@ -63,13 +97,22 @@ const Game: React.FC = () => {
                 </div>
 
                 <div className="map-container w-full max-w-3xl">
-                    <img
-                        ref={mapRef}
-                        src={mapImg}
-                        alt="map"
-                        onClick={handleClick}
-                        onLoad={handleMapLoad}
-                    />
+                    <div className="map-click-wrapper">
+                        <img
+                            ref={mapRef}
+                            src={mapImg}
+                            alt="map"
+                            onClick={handleMapClick}
+                            onLoad={handleMapLoad}
+                        />
+                        {ripples.map((ripple) => (
+                            <span
+                                key={ripple.id}
+                                className="map-ripple"
+                                style={{ left: ripple.x, top: ripple.y }}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 <div className="flex gap-4">
@@ -81,6 +124,13 @@ const Game: React.FC = () => {
                         className="play-again-btn mt-6"
                     >
                         🏆 Leaderboard
+                    </button>
+                    <button
+                        onClick={toggleMute}
+                        className="play-again-btn mt-6"
+                        title={isMuted ? "Unmute sound" : "Mute sound"}
+                    >
+                        {isMuted ? "🔇" : "🔊"}
                     </button>
                 </div>
             </div>
@@ -98,8 +148,18 @@ const Game: React.FC = () => {
                             <span className="modal-score-label">Clicks used</span>
                             <span className="modal-score-value">{clicks}</span>
                         </div>
-                        <button onClick={handleOk} className="modal-ok-btn mt-6">
-                            Collect Treasure
+                        <button
+                            onClick={handleOk}
+                            className="modal-ok-btn mt-6"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? (
+                                <span className="btn-loading">
+                                    <span className="btn-spinner" /> Submitting...
+                                </span>
+                            ) : (
+                                "Collect Treasure"
+                            )}
                         </button>
                     </div>
                 </div>
