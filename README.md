@@ -14,7 +14,7 @@ A professionally engineered, interactive "Hot or Cold" treasure hunting game bui
 
 ## 🚀 Live Demo
 
-[🌐 **Play the Game**](https://treasure-hunt-vert-eta.vercel.app/) — Deployed on Vercel
+[🌐 **Play the Game**](https://treasure-game-sand.vercel.app/) — Deployed on Vercel
 
 ## 🎯 Engineering Excellence
 
