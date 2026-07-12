@@ -24,7 +24,7 @@ test.describe('Treasure Hunt Game', () => {
     expect(hintText).not.toContain('Try to find the treasure!');
 
     // 5. Test "Play Again" button visibility
-    const restartBtn = page.locator('.play-again-btn');
+    const restartBtn = page.getByRole('button', { name: '↺ Play Again' });
     await expect(restartBtn).toBeVisible();
   });
 
@@ -36,7 +36,7 @@ test.describe('Treasure Hunt Game', () => {
     await page.locator('img[alt="map"]').click();
 
     // Click restart
-    await page.locator('.play-again-btn').click();
+    await page.getByRole('button', { name: '↺ Play Again' }).click();
 
     // Hint should reset to initial state
     await expect(page.locator('.hint-container')).toContainText('Try to find the treasure!');
