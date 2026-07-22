@@ -102,9 +102,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
         relativeY,
         clicks: newClicks,
       });
-      if (aiResult.success) {
-        setHint(aiResult.hint);
-      }
+      setHint(aiResult.hint);
     }
 
     if (isFound) {

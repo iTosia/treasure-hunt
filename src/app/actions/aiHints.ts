@@ -1,7 +1,7 @@
 'use server';
 
 import { generateText } from 'ai';
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
 
 interface HintParams {
   distance: number;
@@ -38,9 +38,9 @@ export async function generateAIHint({ distance, relativeX, relativeY, clicks }:
   `;
 
   try {
-    // Use the fastest Claude model for low-latency hints
+    // Use the Google Gemini model for low-latency hints
     const { text } = await generateText({
-      model: anthropic('claude-3-haiku'),
+      model: google('gemini-2.5-flash'),
       prompt: prompt,
     });
 

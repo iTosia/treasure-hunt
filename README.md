@@ -68,7 +68,7 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
 - Node.js 20+
 - A [Clerk](https://clerk.com) account for authentication
 - A [Neon](https://neon.tech) PostgreSQL database
-- An [Anthropic](https://console.anthropic.com) API key (for AI hints)
+- An [Google AI Studio](https://aistudio.google.com/) API key (for AI hints)
 
 ### Installation
 
@@ -94,7 +94,7 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
    Then fill in your credentials in `.env.local`:
    - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` from [Clerk Dashboard](https://dashboard.clerk.com)
    - `DATABASE_URL` from [Neon Console](https://console.neon.tech)
-   - `ANTHROPIC_API_KEY` from [Anthropic Console](https://console.anthropic.com)
+   - `GOOGLE_GENERATIVE_AI_API_KEY` from [Google AI Studio](https://aistudio.google.com/)
 
 4. Set up the database:
 
