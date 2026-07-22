@@ -24,7 +24,7 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
 
 - **Type-Safe Architecture**: Fully migrated to **TypeScript**, ensuring robust data structures and reducing runtime errors through strict typing of game state and event handlers.
 - **Separation of Concerns**: Decoupled game logic from the UI by implementing a **custom React hook (`useTreasureHunt`)** and a layer of **pure utility functions**. This ensures the business logic is independent of the presentation layer.
-- **AI-Powered Hints**: Integrated **Anthropic Claude** via the Vercel AI SDK to generate thematic pirate-style hints every 3rd click, providing an engaging, dynamic hint system.
+- **AI-Powered Hints**: Integrated **Google Gemini** via the Vercel AI SDK to generate thematic pirate-style hints every 2nd click, providing an engaging, dynamic hint system.
 - **Authentication & Leaderboard**: Full authentication flow with **Clerk** and a global leaderboard powered by **Prisma** + **Neon PostgreSQL**.
 - **TDD (Test-Driven Development)**:
   - **Unit Testing**: Comprehensive suite using **Vitest** and **React Testing Library** to verify proximity algorithms and state transitions.
@@ -38,7 +38,7 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
   - 🌡️ **Warm**: Getting closer.
   - 🔥 **Very Hot**: Almost there!
   - 🎉 **Found**: Treasure discovered!
-- **AI Pirate Hints**: Every 3rd click, a salty pirate captain (powered by Claude AI) gives you a thematic hint about your direction.
+- **AI Pirate Hints**: Every 2nd click, a salty pirate captain (powered by Google Gemini) gives you a thematic hint about your direction.
 - **GTA-Style Rewards**: High-energy "Mission Passed" animation with the iconic Pricedown font and sound effects.
 - **Global Leaderboard**: Sign in with Clerk to submit your score and compete with players worldwide.
 - **Sound Toggle**: Mute/unmute the victory sound effect.
@@ -57,7 +57,7 @@ Beyond the game mechanics, this project serves as a showcase of modern software 
 | **Styling**    | Tailwind CSS & SCSS                       |
 | **Database**   | Neon PostgreSQL via Prisma                |
 | **Auth**       | Clerk                                     |
-| **AI**         | Anthropic Claude (Vercel AI SDK)          |
+| **AI**         | Google Gemini (Vercel AI SDK)          |
 | **Testing**    | Vitest, React Testing Library, Playwright |
 | **CI/CD**      | GitHub Actions → Vercel                   |
 
