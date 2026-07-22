@@ -19,8 +19,12 @@ interface UseTreasureHuntReturn {
   hintState: string;
   showResult: boolean;
   modalClosing: boolean;
+  hintState: string;
+  showResult: boolean;
+  modalClosing: boolean;
   showMissionCompleted: boolean;
   bestScore: string | number | null;
+  isAiLoading: boolean;
   handleMapLoad: () => void;
   handleClick: (e: React.MouseEvent<HTMLImageElement>) => void;
   handleModalAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => void;
@@ -44,6 +48,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
   const [modalClosing, setModalClosing] = useState(false);
   const [showMissionCompleted, setShowMissionCompleted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAiLoading, setIsAiLoading] = useState(false);
   const [bestScore, setBestScore] = useState<string | number | null>(null);
 
   useEffect(() => {
@@ -93,16 +98,21 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     setFound(isFound);
 
     // Every 2nd click (and not found), call AI for a thematic pirate hint
-    if (newClicks % 2 === 0 && !isFound) {
-      const relativeX = x - treasure.x;
-      const relativeY = y - treasure.y;
-      const aiResult = await generateAIHint({
-        distance,
-        relativeX,
-        relativeY,
-        clicks: newClicks,
-      });
-      setHint(aiResult.hint);
+    if (newClicks % 2 === 0 && !isFound && !isAiLoading) {
+      setIsAiLoading(true);
+      try {
+        const relativeX = x - treasure.x;
+        const relativeY = y - treasure.y;
+        const aiResult = await generateAIHint({
+          distance,
+          relativeX,
+          relativeY,
+          clicks: newClicks,
+        });
+        setHint(aiResult.hint);
+      } finally {
+        setIsAiLoading(false);
+      }
     }
 
     if (isFound) {
@@ -185,6 +195,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     modalClosing,
     showMissionCompleted,
     bestScore,
+    isAiLoading,
     handleMapLoad,
     handleClick,
     handleModalAnimationEnd,
