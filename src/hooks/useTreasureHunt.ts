@@ -19,9 +19,6 @@ interface UseTreasureHuntReturn {
   hintState: string;
   showResult: boolean;
   modalClosing: boolean;
-  hintState: string;
-  showResult: boolean;
-  modalClosing: boolean;
   showMissionCompleted: boolean;
   bestScore: string | number | null;
   isAiLoading: boolean;
@@ -37,6 +34,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
   const mapRef = useRef<HTMLImageElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const afterModalClose = useRef<(() => void) | null>(null);
+  const foundRef = useRef(false);
 
   const [isLoading, setIsLoading] = useState(true);
   const [treasure, setTreasure] = useState<Treasure | null>(null);
@@ -96,6 +94,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     setHint(text);
     setHintState(state);
     setFound(isFound);
+    foundRef.current = isFound;
 
     // Every 2nd click (and not found), call AI for a thematic pirate hint
     if (newClicks % 2 === 0 && !isFound && !isAiLoading) {
@@ -109,7 +108,9 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
           relativeY,
           clicks: newClicks,
         });
-        setHint(aiResult.hint);
+        if (!foundRef.current) {
+          setHint(aiResult.hint);
+        }
       } finally {
         setIsAiLoading(false);
       }
@@ -170,6 +171,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     setClicks(0);
     setHint("Try to find the treasure!");
     setFound(false);
+    foundRef.current = false;
     setShowMissionCompleted(false);
     setHintState("normal");
   };
