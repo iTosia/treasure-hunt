@@ -35,4 +35,7 @@ CLAUDE.md
 /out/
 .next
 
+# Testing
+/playwright-report/
+/test-results/
 /src/generated/prisma
