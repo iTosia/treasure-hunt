@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { calculateDistance, getHintForDistance } from '../utils/gameLogic';
 import { submitScore } from '../app/actions/leaderboard';
-import { generateAIHint } from '../app/actions/aiHints';
+import { generateAIHint as generatePirateHint } from '../app/actions/pirateHints';
 
 interface Treasure {
   x: number;
@@ -102,7 +102,7 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
       const relativeY = y - treasure.y;
 
       // Call the action and update hint
-      generateAIHint({
+      generatePirateHint({
         distance,
         relativeX,
         relativeY,

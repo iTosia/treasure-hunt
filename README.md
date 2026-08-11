@@ -8,7 +8,7 @@
 [![Clerk](https://img.shields.io/badge/Clerk-Auth-6C47FF)](https://clerk.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-An interactive "Hot or Cold" treasure hunting game built to showcase modern full-stack engineering. This project is a key piece of my professional portfolio, demonstrating my ability to integrate **generative AI**, **type-safe database architectures**, and **automated quality assurance** into a polished, user-centric product.
+An interactive "Hot or Cold" treasure hunting game built to showcase modern full-stack engineering. This project is a key piece of my professional portfolio, demonstrating my ability to integrate **type-safe database architectures**, **complex state management**, and **automated quality assurance** into a polished, user-centric product.
 
 ![Game Preview](./assets/screenshots/screenshot.png)
 
@@ -22,15 +22,15 @@ An interactive "Hot or Cold" treasure hunting game built to showcase modern full
 
 This project goes beyond simple game mechanics to implement industry-standard software engineering patterns:
 
-### 🧠 AI-Powered Engagement
-Instead of static text, the game integrates **Google Gemini** via the **Vercel AI SDK**. 
-- **Thematic Prompting**: Every click triggers a server action that calculates the user's relative position to the treasure and generates a "salty pirate" hint in real-time.
-- **Robust Fallbacks**: Implemented a dual-layered hint system where the AI provides the flavor, but a deterministic geometric algorithm ensures the user always receives accurate proximity feedback, even if the AI API fails.
+### 🏴‍☠️ Thematic Engagement
+Instead of generic feedback, the game uses a custom procedurally generated hint system.
+- **Dynamic Clue Generation**: Every click triggers a server action that calculates the user's relative position to the treasure and selects a context-aware "salty pirate" hint in real-time.
+- **Deterministic Logic**: Implemented a robust proximity system where geometric calculations ensure the user always receives accurate feedback, combined with a thematic layer to enhance immersion.
 
 ### 🏗️ Architectural Decisions
 - **Encapsulated Game Logic**: All game state and side effects are managed within a custom `useTreasureHunt` hook. This keeps the UI components purely presentational and makes the business logic easily testable in isolation.
 - **Type-Safe Infrastructure**: Leveraging **TypeScript** across the entire stack—from Prisma schema definitions to Server Action responses—eliminating an entire class of runtime errors.
-- **Server-Side Orchestration**: Used **Next.js Server Actions** to handle sensitive AI API keys and database mutations, ensuring zero exposure of secrets to the client.
+- **Server-Side Orchestration**: Used **Next.js Server Actions** to handle database mutations and hint logic, ensuring a clean separation between client-side interactivity and server-side business rules.
 
 ### 🧪 Quality Assurance & CI/CD
 I adopted a "Test-First" mentality to ensure stability:
@@ -44,7 +44,7 @@ I adopted a "Test-First" mentality to ensure stability:
 
 - **Dynamic Proximity System**: Real-time distance calculation using Euclidean geometry:
   - ❄️ **Cold** $\rightarrow$ 🌡️ **Warm** $\rightarrow$ 🔥 **Very Hot** $\rightarrow$ 🎉 **Found**
-- **AI Pirate Captain**: A dynamic NPC that guides you using thematic, AI-generated clues based on your actual coordinates.
+- **Pirate Captain**: A dynamic NPC that guides you using thematic clues based on your actual coordinates.
 - **GTA-Style Rewards**: High-energy "Mission Passed" animation with the iconic Pricedown font and sound effects for maximum dopamine.
 - **Competitive Layer**: Full authentication flow via **Clerk** and a global leaderboard powered by **Neon PostgreSQL**, allowing players to compete for the lowest click count.
 - **Polished UX**: Responsive design, click-ripple animations, and a custom asset-loading lifecycle to prevent "layout shift" before the game starts.
@@ -59,7 +59,6 @@ I adopted a "Test-First" mentality to ensure stability:
 | **Styling**    | Tailwind CSS & SCSS                       |
 | **Database**   | Neon PostgreSQL via Prisma                |
 | **Auth**       | Clerk                                     |
-| **AI**         | Google Gemini (Vercel AI SDK)          |
 | **Testing**    | Vitest, React Testing Library, Playwright |
 | **CI/CD**      | GitHub Actions $\rightarrow$ Vercel                   |
 
@@ -69,7 +68,7 @@ I adopted a "Test-First" mentality to ensure stability:
 
 ### Prerequisites
 - Node.js 20+
-- Clerk Account, Neon PostgreSQL DB, and Google AI Studio API Key.
+- Clerk Account and Neon PostgreSQL DB.
 
 ### Installation
 1. **Clone & Install**:
@@ -81,7 +80,7 @@ I adopted a "Test-First" mentality to ensure stability:
 2. **Environment Setup**:
    ```bash
    cp .env.example .env.local
-   # Fill in Clerk, Neon, and Google AI keys in .env.local
+   # Fill in Clerk and Neon keys in .env.local
    ```
 3. **Database Init**:
    ```bash
@@ -101,7 +100,7 @@ I adopted a "Test-First" mentality to ensure stability:
 ```text
 src/
 ├── app/
-│   ├── actions/       # Server Actions (AI, Leaderboard)
+│   ├── actions/       # Server Actions (Hints, Leaderboard)
 │   ├── globals.scss   # Thematic styles & animations
 │   └── page.tsx       # Game entry point
 ├── components/       # Pure UI components
