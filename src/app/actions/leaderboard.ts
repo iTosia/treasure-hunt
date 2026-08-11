@@ -16,7 +16,7 @@ export async function submitScore(score: number) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error('Authentication required to submit scores');
+    return { success: false, error: 'Authentication required' };
   }
 
   // In a real app, we'd fetch the actual user's name from Clerk.

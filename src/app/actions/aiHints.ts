@@ -1,8 +1,5 @@
 'use server';
 
-import { generateText } from 'ai';
-import { google } from '@ai-sdk/google';
-
 interface HintParams {
   distance: number;
   relativeX: number;
@@ -10,48 +7,62 @@ interface HintParams {
   clicks: number;
 }
 
-export async function generateAIHint({ distance, relativeX, relativeY, clicks }: HintParams) {
-  // We don't want to call AI for every single click to save cost and latency.
-  // The calling component will decide when to call this.
+const HINTS = {
+  cold: [
+    "Arrr, ye be wandering in the void! Keep searchin', matey!",
+    "Shiver me timbers, ye be colder than a fish's belly!",
+    "Ye be as far from the gold as a landlubber is from the sea!",
+    "The spirits be silent... ye must wander further, scallywag!",
+    "Nothing but sand and salt here. Keep yer eyes peeled!",
+  ],
+  warm: {
+    openers: [
+      "I smell gold to the ",
+      "Steer yer course toward the ",
+      "Cast yer eye toward the ",
+      "The wind whispers secrets of treasure in the ",
+      "Avast! The trail leads to the ",
+    ],
+    closers: [
+      ", ye scallywag!",
+      ", or ye'll be walkin' the plank!",
+      ", by the powers of Neptune!",
+      ", before the tide turns!",
+      ", ye salty dog!",
+    ],
+  },
+  hot: [
+    "I can almost taste the doubloons! Ye be right on top of it!",
+    "Ye be practically standin' on the gold, ye lucky dog!",
+    "Batten down the hatches! The treasure be mere inches away!",
+    "By the beard of Zeus, ye've found the spot! Dig deep!",
+    "Scurvy dog! Ye be so close I can see the glitter in yer eyes!",
+  ],
+};
 
+export async function generateAIHint({ distance, relativeX, relativeY }: HintParams) {
   const direction = getDirection(relativeX, relativeY);
   const proximity = getProximityLabel(distance);
 
-  const prompt = `
-    You are a salty, grizzled old pirate captain who knows exactly where the treasure is hidden.
-    The player is currently searching for the treasure.
+  let hint = "";
 
-    Current state:
-    - Distance to treasure: ${distance.toFixed(0)} pixels.
-    - Proximity: ${proximity}
-    - Relative direction: ${direction}
-    - Total clicks so far: ${clicks}
-
-    Give a short, thematic pirate-style hint (1-2 sentences).
-    - If they are "Cold", be vague and encouraging.
-    - If they are "Warm", give them a hint about the general direction.
-    - If they are "Hot", be very excited and tell them they are almost there, but don't give away the exact spot.
-
-    Example: "Arrr, ye be getting warmer! Shift yer gaze to the east, where the jagged rocks meet the surf!"
-
-    Only return the hint text. No quotes, no labels.
-  `;
-
-  try {
-    // Use the Google Gemini model for low-latency hints
-    const { text } = await generateText({
-      model: google('gemini-2.5-flash'),
-      prompt: prompt,
-    });
-
-    return { success: true, hint: text };
-  } catch (error) {
-    console.error('AI Hint Error:', error);
-    return {
-      success: false,
-      hint: "Arrr, the spirits are silent... keep searching, matey!"
-    };
+  if (proximity === 'Cold') {
+    hint = pickRandom(HINTS.cold);
+  } else if (proximity === 'Warm') {
+    const opener = pickRandom(HINTS.warm.openers);
+    const closer = pickRandom(HINTS.warm.closers);
+    hint = `${opener}${direction}${closer}`;
+  } else if (proximity === 'Hot') {
+    hint = pickRandom(HINTS.hot);
+  } else {
+    hint = "Ye found it! The treasure be yours!";
   }
+
+  return { success: true, hint };
+}
+
+function pickRandom(arr: string[]) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function getDirection(rx: number, ry: number): string {

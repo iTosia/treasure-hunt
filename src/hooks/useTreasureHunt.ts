@@ -21,7 +21,6 @@ interface UseTreasureHuntReturn {
   modalClosing: boolean;
   showMissionCompleted: boolean;
   bestScore: string | number | null;
-  isAiLoading: boolean;
   handleMapLoad: () => void;
   handleClick: (e: React.MouseEvent<HTMLImageElement>) => void;
   handleModalAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => void;
@@ -46,7 +45,6 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
   const [modalClosing, setModalClosing] = useState(false);
   const [showMissionCompleted, setShowMissionCompleted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAiLoading, setIsAiLoading] = useState(false);
   const [bestScore, setBestScore] = useState<string | number | null>(null);
 
   useEffect(() => {
@@ -91,33 +89,28 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     setClicks(newClicks);
 
     const { text, state, isFound } = getHintForDistance(distance);
-    setHint(text);
     setHintState(state);
     setFound(isFound);
     foundRef.current = isFound;
 
-    // Every 2nd click (and not found), call AI for a thematic pirate hint
-    if (newClicks % 2 === 0 && !isFound && !isAiLoading) {
-      setIsAiLoading(true);
+    if (isFound) {
+      setHint(text);
+      setShowResult(true);
+    } else {
+      // Use our pirate template system for every click
+      const relativeX = x - treasure.x;
+      const relativeY = y - treasure.y;
       try {
-        const relativeX = x - treasure.x;
-        const relativeY = y - treasure.y;
         const aiResult = await generateAIHint({
           distance,
           relativeX,
           relativeY,
           clicks: newClicks,
         });
-        if (!foundRef.current) {
-          setHint(aiResult.hint);
-        }
-      } finally {
-        setIsAiLoading(false);
+        setHint(aiResult.hint);
+      } catch (e) {
+        setHint(text); // Fallback to basic hint
       }
-    }
-
-    if (isFound) {
-      setShowResult(true);
     }
   };
 
@@ -148,9 +141,12 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
       // Submit to Global Leaderboard if authenticated
       try {
         setIsSubmitting(true);
-        await submitScore(clicks);
+        const result = await submitScore(clicks);
+        if (result && 'error' in result) {
+          console.log("Score submission skipped: " + result.error);
+        }
       } catch (e) {
-        console.log("Score submission skipped or failed (likely not signed in)");
+        console.log("Score submission failed unexpectedly");
       } finally {
         setIsSubmitting(false);
       }
@@ -197,7 +193,6 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
     modalClosing,
     showMissionCompleted,
     bestScore,
-    isAiLoading,
     handleMapLoad,
     handleClick,
     handleModalAnimationEnd,
