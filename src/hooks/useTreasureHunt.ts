@@ -100,17 +100,20 @@ export function useTreasureHunt(): UseTreasureHuntReturn {
       // Use our pirate template system for every click
       const relativeX = x - treasure.x;
       const relativeY = y - treasure.y;
-      try {
-        const aiResult = await generateAIHint({
-          distance,
-          relativeX,
-          relativeY,
-          clicks: newClicks,
-        });
-        setHint(aiResult.hint);
-      } catch (e) {
+
+      // Call the action and update hint
+      generateAIHint({
+        distance,
+        relativeX,
+        relativeY,
+        clicks: newClicks,
+      }).then(aiResult => {
+        if (!foundRef.current) {
+          setHint(aiResult.hint);
+        }
+      }).catch(() => {
         setHint(text); // Fallback to basic hint
-      }
+      });
     }
   };
 

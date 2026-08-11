@@ -19,7 +19,9 @@ test.describe('Treasure Hunt Game', () => {
     await map.click({ position: { x: 100, y: 100 } });
 
     // The hint should change from the initial "Try to find the treasure!"
-    // to either "Cold", "Warm", "Very hot", or "Treasure found!"
+    // Give it a moment to update since it's an async server action
+    await expect(page.locator('.hint-container')).not.toContainText('Try to find the treasure!', { timeout: 10000 });
+
     const hintText = await page.locator('.hint-container').innerText();
     expect(hintText).not.toContain('Try to find the treasure!');
 
